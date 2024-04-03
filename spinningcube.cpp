@@ -81,20 +81,24 @@ int main() {
     "  vs_tex_coord = tex_coord;"
     "}";
 
-// Fragment Shader
-const char* fragment_shader =
+  // Fragment Shader
+  const char* fragment_shader=
     "#version 410\n"
     "out vec4 frag_col;"
     "in vec2 vs_tex_coord;"
     "uniform sampler2D theTexture;"
+
     "void main() {"
-    "  if (vs_tex_coord == vec2(-1.0, -1.0)) {" // Verificamos si las coordenadas de textura son (-1, -1)
-    "      frag_col = vec4(vs_tex_coord * 2.0, 0.4, 1.0);" // Aplicamos el color arcoíris
-    "  } else {" // Si no, aplicamos la textura
-    "      frag_col = texture(theTexture, vs_tex_coord);"
-    "  }"
+    "vec2 texCoord = vs_tex_coord;"
+    "if (texCoord != vec2(0.0, 0.0)) {"
+    "   frag_col = texture(theTexture, vs_tex_coord);"
+    "} else {"
+        "frag_col = vec4(1.0);"
+      "}"
     "}";
 
+
+  
 
   // Shaders compilation
   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -177,7 +181,7 @@ const char* fragment_shader =
     0.0f, 1.0f
     };
 
-    // Load image for texture
+  // Load image for texture
   GLuint texture = 0;
 
   // Vertex Buffer Object (for vertex coordinates and texture coordinates)
