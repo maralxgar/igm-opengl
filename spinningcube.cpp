@@ -74,11 +74,13 @@ int main() {
     "in vec4 v_pos;"
     "in vec2 tex_coord;"
     "out vec2 vs_tex_coord;"
+    "out vec4 vs_color;"
     "uniform mat4 mv_matrix;"
     "uniform mat4 proj_matrix;"
     "void main() {"
     "  gl_Position = proj_matrix * mv_matrix * v_pos;"
     "  vs_tex_coord = tex_coord;"
+    "  vs_color = v_pos * 2.0 + vec4(0.4, 0.4, 0.4, 0.0);"
     "}";
 
   // Fragment Shader
@@ -86,19 +88,17 @@ int main() {
     "#version 410\n"
     "out vec4 frag_col;"
     "in vec2 vs_tex_coord;"
+    "in vec4 vs_color;"
     "uniform sampler2D theTexture;"
-
     "void main() {"
-    "vec2 texCoord = vs_tex_coord;"
-    "if (texCoord != vec2(0.0, 0.0)) {"
-    "   frag_col = texture(theTexture, vs_tex_coord);"
-    "} else {"
-        "frag_col = vec4(1.0);"
-      "}"
+    "  vec2 texCoord = vs_tex_coord;"
+    "  if (texCoord != vec2(0.0, 0.0)) {"
+    "     frag_col = texture(theTexture, vs_tex_coord);"
+    "  } else {"
+    "     frag_col = vs_color;"
+    "  }"
     "}";
 
-
-  
 
   // Shaders compilation
   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
